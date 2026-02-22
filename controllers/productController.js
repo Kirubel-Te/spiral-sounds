@@ -1,7 +1,13 @@
-export async function getGenres(){
-    console.log('Fetching genres from API...')
-}
+import { getDBConnection } from "../db/db.js"
 
-export async function getProducts(){
-    console.log('Fetching products from API...')
+export async function getGenres(req, res) {
+    try{
+        const db = await getDBConnection()
+        const genres = await db.all('SELECT DISTINCT genre FROM products')
+        await db.close()
+        res.json(genres.map(g => g.genre))
+    }catch(error){
+        console.error('Error fetching genres:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 }
