@@ -10,8 +10,10 @@ export async function logTable(){
         driver:sqlite3.Database
     })
 
-    const products = await db.all('SELECT * FROM users')
+    const products = await db.all('SELECT * FROM products')
     console.table(products)
+    const users = await db.all('SELECT * FROM users')
+    console.table(users)
 
     await db.close()
 }
