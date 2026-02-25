@@ -2,10 +2,14 @@ import express from 'express'
 import router from './routes/products.js'
 import authRouter from './routes/auth.js'
 import session from 'express-session'
+import dotenv from 'dotenv'
+import meRouter from './routes/me.js'
+
+dotenv.config()
 const PORT = 8000
 
 const app = express()
-const secret = process.env.SPIRAL_SESSION_SECRET || 'jellyfish-baskingshark'
+const secret = process.env.SPIRAL_SESSION_SECRET
 
 app.use(express.json())
 
@@ -22,6 +26,7 @@ app.use(session({
 
 app.use(express.static('public'))
 app.use('/api/products',router)
+app.use('/api/auth/me', meRouter)
 app.use('/api/auth',authRouter)
 
 
