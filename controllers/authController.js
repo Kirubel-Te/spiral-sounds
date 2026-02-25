@@ -44,3 +44,41 @@ export async function registerUser(req,res){
 
     
 }
+
+export async function loginUser(req,res){
+    let {username, password} = req.body
+
+    if(!username || !password){
+        return res.status(400).json({error: 'Username and password are required'})
+    }
+    username = username.trim()
+    password = password.trim()
+    try{
+        const db = await getDBConnection()
+        const user = await db.get('SELECT * FROM users WHERE username = ?', [username])
+        await db.close()
+        if(!user){
+            return res.status(400).json({error: 'Invalid username or password'})
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password)
+        if(!isPasswordValid){
+            return res.status(400).json({error: 'Invalid username or password'})
+        }
+        req.session.userId = user.id
+        return res.json({message: 'Login successful', userId: user.id})
+    }catch(error){
+        console.error('Error logging in user:', error)
+        return res.status(500).json({error: 'Login failed. Please try again.'})
+    }
+}
+
+export async function logoutUser(req,res){
+    req.session.destroy(err => {
+        if(err){
+            console.error('Error logging out user:', err)
+            return res.status(500).json({error: 'Logout failed. Please try again.'})
+        }
+        res.clearCookie('connect.sid')
+        return res.json({message: 'Logout successful'})
+    })
+}

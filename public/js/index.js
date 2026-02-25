@@ -14,10 +14,10 @@ async function init() {
   const username = await checkAuth()
   renderGreeting(username)
   renderProducts(products)
-  // showHideMenuItems(username)
-  // if (username) {
-  //   await updateCartIcon()
-  // }
+  showHideMenuItems(username)
+  if (username) {
+    await updateCartIcon()
+  }
 }
 
 init()
