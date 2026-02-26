@@ -25,3 +25,18 @@ export async function addToCart(req, res) {
         await db.close()
     }
 }
+export async function cartCount(req, res){
+    const userId = req.session.userId
+    if(!userId) {
+        return res.status(401).json({message: 'Unauthorized'})
+    }
+    const db = await getDBConnection()
+    try{
+        const count = await db.get('SELECT SUM(quantity) as count FROM cart_items WHERE user_id = ?', [userId])
+        res.json({totalItems: count.count || 0})
+    }catch(error){
+        res.status(500).json({message: 'Error fetching cart count', error: error.message})
+    } finally {
+        await db.close()
+    }
+}
