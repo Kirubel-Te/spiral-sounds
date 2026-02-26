@@ -14,6 +14,8 @@ export async function logTable(){
     console.table(products)
     const users = await db.all('SELECT * FROM users')
     console.table(users)
+    const cartItems = await db.all('SELECT * FROM cart_items')
+    console.table(cartItems)
 
     await db.close()
 }
