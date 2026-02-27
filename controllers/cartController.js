@@ -5,9 +5,6 @@ export async function addToCart(req, res) {
         return res.status(400).json({message: 'Invalid product ID'})
     }
     const userId = req.session.userId
-    if(!userId) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
     
     const db = await getDBConnection()
     try {
@@ -27,9 +24,6 @@ export async function addToCart(req, res) {
 }
 export async function cartCount(req, res){
     const userId = req.session.userId
-    if(!userId) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
     const db = await getDBConnection()
     try{
         const count = await db.get('SELECT SUM(quantity) as count FROM cart_items WHERE user_id = ?', [userId])
@@ -43,9 +37,6 @@ export async function cartCount(req, res){
 
 export async function getAll(req, res){
     const userId = req.session.userId
-    if(!userId) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
     const db = await getDBConnection()
     try{
         const items = await db.all(`
@@ -67,9 +58,6 @@ export async function deleteItem(req, res){
         return res.status(400).json({message: 'Invalid cart item ID'})
     }
     const userId = req.session.userId
-    if(!userId) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
     const db = await getDBConnection()
     try{
         const item = await db.get('SELECT * FROM cart_items WHERE id = ? AND user_id = ?', [cartItemId, userId])
@@ -88,9 +76,6 @@ export async function deleteItem(req, res){
 
 export async function deleteAll(req, res){
     const userId = req.session.userId
-    if(!userId) {
-        return res.status(401).json({message: 'Unauthorized'})
-    }
     const db = await getDBConnection()
     try{
         await db.run('DELETE FROM cart_items WHERE user_id = ?', [userId])
