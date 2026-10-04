@@ -7,7 +7,6 @@ Spiral Sounds is a full-stack JavaScript web app for browsing vinyl records, cre
 - **Backend:** Node.js, Express 5
 - **Database:** SQLite (`sqlite3` + `sqlite`)
 - **Auth:** `express-session` + `bcryptjs`
-- **Validation:** `validator`
 - **Frontend:** Vanilla HTML/CSS/JS modules served from `public/`
 
 ## Features
